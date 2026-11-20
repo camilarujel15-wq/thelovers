@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -39,3 +40,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Material original de marca (fotos pesadas y PDF); el sitio usa las versiones optimizadas de /public
+/Recursos página web/
+
+# Base de datos de desarrollo y cliente de Prisma generado
+/.dev-db/
+/src/generated/
+/.uploads/
+/.next-preview/
+/.next-build/

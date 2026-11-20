@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum OrderStatus {
+  RECIBIDO
+  DISENO_PROCESO
+  DISENO_APROBADO
+  PRODUCCION
+  EMPAQUETADO
+  ENVIADO
+  ENTREGADO
+  CANCELADO
+}
+
+enum PaymentStatus {
+  PENDIENTE
+  PAGADO
+}
+
+enum FileKind {
+  FOTO
+  VIDEO
+  AUDIO
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  status        OrderStatus   @default(RECIBIDO)
+  paymentStatus PaymentStatus @default(PENDIENTE)
+  paymentMethod String
+  paidAt        DateTime?
+
+  customerName  String
+  customerEmail String
+  customerPhone String
+
+  productSlug      String
+  productName      String
+  size             String?
+  presentation     String?
+  extras           String[]
+  braceletInitials String[]
+  designFields     Json
+  comments         String?
+
+  photosLater Boolean @default(false)
+  mediaLater  Boolean @default(false)
+
+  deliveryMethod String
+  region         String?
+  province       String?
+  city           String?
+  address        String?
+  reference      String?
+  shalomAgency   String?
+  deliveryNotes  String?
+
+  basePrice     Int
+  extrasPrice   Int
+  shippingPrice Int
+  total         Int
+
+  estimatedFrom DateTime
+  estimatedTo   DateTime
+
+  internalNote String?
+
+  files  OrderFile[]
+  events OrderEvent[]
+
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([customerEmail])
+  @@index([customerPhone])
+  @@index([createdAt])
+}
+
+model OrderFile {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  kind      FileKind
+  groupId   String?
+  url       String
+  publicId  String?
+  fileName  String
+  bytes     Int
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+}
+
+model OrderEvent {
+  id        String      @id @default(cuid())
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    OrderStatus
+  note      String?
+  createdAt DateTime    @default(now())
+
+  @@index([orderId])
+}

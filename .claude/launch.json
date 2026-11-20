@@ -1,0 +1,22 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "thelovers-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "thelovers-preview",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/dev-preview.cjs"
+      ],
+      "port": 3100
+    }
+  ]
+}
